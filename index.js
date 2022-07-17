@@ -16,7 +16,7 @@ setInterval(FindProcess, 60000); // Update Every 60 Second to Avoid Duplicate
 function FindProcess()
 {
     console.log("Find Process");
-    find('name', 'omp-server')
+    find('name', process.env.PROCESS_NAME)
     .then(function (list) {
         if (!list.length) {
             const embed = new MessageEmbed()
@@ -27,8 +27,8 @@ function FindProcess()
                 .addField("RAM", `0 / ${formatBytes(os.totalmem())}`)
                 .setTimestamp();
 
-            webhookClient.editMessage("998073078896676915", {
-                username: 'Indonesia Roleplay Resource',
+            webhookClient.editMessage(process.env.WEBHOOK_MESSAGE_ID, {
+                username: process.env.WEBHOOK_NAME,
                 avatarURL: process.env.WEBHOOK_PROFILE,
                 embeds: [embed],
             });
@@ -45,8 +45,8 @@ function FindProcess()
                     .addField("RAM", `${formatBytes(stats.memory)} / ${formatBytes(os.totalmem())}`)
                     .setTimestamp();
 
-                webhookClient.editMessage("998073078896676915", {
-                    username: 'Indonesia Roleplay Resource',
+                webhookClient.editMessage(process.env.WEBHOOK_MESSAGE_ID, {
+                    username: process.env.WEBHOOK_NAME,
                     avatarURL: process.env.WEBHOOK_PROFILE,
                     embeds: [embed],
                 });
