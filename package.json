@@ -1,0 +1,17 @@
+{
+  "name": "server-stats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "SAMPINDO",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^13.8.1",
+    "dotenv": "^16.0.1",
+    "find-process": "^1.4.7",
+    "pidusage": "^3.0.0"
+  }
+}
