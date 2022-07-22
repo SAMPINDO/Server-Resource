@@ -12,6 +12,8 @@
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",
     "find-process": "^1.4.7",
-    "pidusage": "^3.0.0"
+    "node-cron": "^3.0.1",
+    "pidusage": "^3.0.0",
+    "uuid": "^8.3.2"
   }
 }

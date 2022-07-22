@@ -1,31 +1,37 @@
-require("dotenv").config();
+require("dotenv").config(); // Dont ENV
+
+/* Discord */
 const { MessageEmbed, WebhookClient } = require('discord.js');
 
 const webhookClient = new WebhookClient({url : process.env.WEBHOOK_URL});
 
+/* OS */
 const find = require('find-process');
 const pidusage = require("pidusage");
-
 const os = require("os");
+const cron = require('node-cron');
 
 function formatBytes(a,b=2,k=1024){with(Math){let d=floor(log(a)/log(k));return 0==a?"0 Bytes":parseFloat((a/pow(k,d)).toFixed(max(0,b)))+" "+["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"][d]}}
 
 FindProcess();
-setInterval(FindProcess, 60000); // Update Every 60 Second to Avoid Duplicate
+cron.schedule('* * * * *', () =>  { // Run Every Minute
+    FindProcess();
+});
 
 function FindProcess()
 {
     console.log("Find Process");
     find('name', process.env.PROCESS_NAME)
     .then(function (list) {
-        if (!list.length) {
-            const embed = new MessageEmbed()
+        const embed = new MessageEmbed()
                 .setTitle('Server Resource')
-                .setColor('#0099ff')
+                .setColor('#0099ff');
+        if (!list.length) {
+            embed
                 .addField("Process ID", "Process Is Not Running")
                 .addField("CPU", "0%")
                 .addField("RAM", `0 / ${formatBytes(os.totalmem())}`)
-                .setTimestamp();
+                .setTimestamp()
 
             webhookClient.editMessage(process.env.WEBHOOK_MESSAGE_ID, {
                 username: process.env.WEBHOOK_NAME,
@@ -37,13 +43,11 @@ function FindProcess()
         else
         {
             pidusage(list[0].pid, function(err, stats) {
-                const embed = new MessageEmbed()
-                    .setTitle('Server Resource')
-                    .setColor('#0099ff')
+                embed
                     .addField("Process ID", list[0].pid.toString())
                     .addField("CPU", Math.round(stats.cpu) + "%")
                     .addField("RAM", `${formatBytes(stats.memory)} / ${formatBytes(os.totalmem())}`)
-                    .setTimestamp();
+                    .setTimestamp()
 
                 webhookClient.editMessage(process.env.WEBHOOK_MESSAGE_ID, {
                     username: process.env.WEBHOOK_NAME,
